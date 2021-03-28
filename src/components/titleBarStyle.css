@@ -1,0 +1,46 @@
+nav.title-bar {
+  align-items: center;
+  -webkit-app-region: drag;
+  background-color: #0001;
+  display: flex;
+  font-size: 16px;
+  left: 0;
+  line-height: 1em;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  z-index: 3;
+}
+
+nav.title-bar > label {
+  margin: 4px auto;
+}
+
+nav.title-bar button {
+  -webkit-app-region: no-drag;
+  background-color: #0002;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: block;
+  outline: none;
+  height: calc(1em + 8px);
+  transform: scale(0.6);
+  width: calc(1em + 8px);
+}
+
+nav.title-bar button:hover {
+  transform: scale(0.7);
+}
+
+nav.title-bar .close:hover {
+  background-color: #ff6059;
+}
+
+nav.title-bar .maximize:hover {
+  background-color: #28cb41;
+}
+
+nav.title-bar .minimize:hover {
+  background-color: #ffbe2f;
+}
