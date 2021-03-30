@@ -14,15 +14,7 @@ const loadingStates = [
 
 function App() {
   const [showLoading, setShowLoading] = useState(true)
-  const [loadingDescription, setLoadingDescription] = useState(
-    "Fetching things"
-  )
-
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setShowLoading(o => !o)
-  //   }, 2000)
-  // }, [])
+  const [loadingDescription, setLoadingDescription] = useState("")
 
   useEffect(() => {
     setInterval(() => {
@@ -31,13 +23,6 @@ function App() {
 
       setLoadingDescription(loadingStates[loadingStateIndex])
     }, 2000)
-    // setTimeout(() => {
-    //   setLoadingDescription("Checking for new movies")
-    // }, 2000)
-
-    // setTimeout(() => {
-    //   setLoadingDescription("")
-    // }, 4000)
   }, [])
 
   return (
