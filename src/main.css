@@ -19,6 +19,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   overflow: hidden;
+  user-select: none;
 }
 
 @keyframes view-show {

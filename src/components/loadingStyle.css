@@ -1,4 +1,143 @@
 .view.loading {
-  background-color: #0ac;
+  background-color: #fff;
+  position: relative;
   z-index: 2;
+}
+
+.view.loading::after {
+  background: radial-gradient(transparent, #fff);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 4;
+}
+
+.view.loading > * {
+  pointer-events: none;
+}
+
+.view.loading > .tiles {
+  display: grid;
+  filter: grayscale(100%);
+  grid-gap: 1em;
+  grid-auto-rows: 40vh;
+  grid-template-columns: repeat(6, 1fr);
+  height: 100%;
+  opacity: 0.3;
+  position: relative;
+  transform: rotate(30deg) translate(0, -30%);
+  width: 120%;
+  z-index: 3;
+}
+
+@keyframes loading-tile-in {
+  100% {
+    transform: translateY(-25%);
+  }
+}
+
+@keyframes loading-tile-in-2 {
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.view.loading > .tiles > div {
+  animation: loading-tile-in 20s ease-in-out alternate infinite;
+  background-color: #d8d8d8;
+  border-radius: 8px;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.view.loading > .tiles > div:nth-child(2n) {
+  animation: loading-tile-in-2 12s ease-in-out alternate infinite;
+  background-color: #acacac;
+  transform: translateY(-25%);
+}
+
+.view.loading > .tiles img {
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  opacity: 0;
+  object-fit: cover;
+  transition: all 0.8s ease;
+  width: 100%;
+}
+
+.view.loading > .tiles img[loaded] {
+  opacity: 1;
+}
+
+.view.loading > main.content {
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+@keyframes loading-title {
+  100% {
+    text-shadow: 0 2px 24px #f9423a80;
+  }
+}
+
+.view.loading > main.content .title {
+  animation: loading-title 2s ease alternate infinite;
+  color: #f9423a;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.5em 0;
+}
+
+.view.loading > main.content .description {
+  font-size: 0.8em;
+  position: relative;
+}
+
+@keyframes loading-description-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-60%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes loading-description-out {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-40%);
+  }
+}
+
+.view.loading > main.content .description > span {
+  animation: loading-description-out 0.5s ease forwards;
+  left: 50%;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  transition: all 0.5s ease;
+  white-space: nowrap;
+}
+
+.view.loading > main.content .description > span.show {
+  animation: loading-description-in 0.5s ease forwards;
 }

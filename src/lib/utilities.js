@@ -1,4 +1,4 @@
-const SQLKeyValueString = obj => {
+export const SQLKeyValueString = obj => {
   const pairs = Object.keys(obj).map(key =>
     typeof obj[key] === "number" ? `${obj[key]}` : `'${obj[key]}'`
   )
@@ -6,4 +6,4 @@ const SQLKeyValueString = obj => {
   return pairs.join(", ")
 }
 
-export { SQLKeyValueString }
+export const shuffleArray = arr => arr.sort(() => Math.random() - 0.5)
