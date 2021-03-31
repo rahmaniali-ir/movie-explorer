@@ -2,7 +2,7 @@ import TitleBar from "./components/titleBar"
 import LoadingView from "./components/loadingView"
 import TargetFoldersView from "./components/targetFoldersView"
 import DashboardView from "./components/dashboardView"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 const { ipcRenderer } = window.require("electron")
 
@@ -18,12 +18,19 @@ const loadingStates = [
 
 function App() {
   const [showLoading, setShowLoading] = useState(true)
+  const [showTargetFolders, setShowTargetFolders] = useState(false)
   const [loadingDescription, setLoadingDescription] = useState("")
 
   useEffect(() => {
     setLoadingDescription(loadingStates[0])
+    setShowTargetFolders(true)
     // ipcRenderer.send("openDirectory")
   }, [])
+
+  const continueTargetFolders = useCallback(() => {
+    setLoadingDescription(loadingStates[1])
+    setShowTargetFolders(false)
+  })
 
   return (
     <div id='App'>
@@ -33,7 +40,10 @@ function App() {
         title={"Loading"}
         description={loadingDescription}
       />
-      <TargetFoldersView />
+      <TargetFoldersView
+        show={showTargetFolders}
+        onContinue={continueTargetFolders}
+      />
 
       <TitleBar />
     </div>

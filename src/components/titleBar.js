@@ -8,7 +8,7 @@ const DashboardView = () => {
 
   return (
     <nav className='title-bar'>
-      <div class='bar'>
+      <div className='bar'>
         <label>Movie Explorer</label>
       </div>
 

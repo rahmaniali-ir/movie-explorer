@@ -47,13 +47,19 @@ h2
   height: 100vh
   left: 0
   opacity: 0
-  padding: var(--view-padding)
   pointer-events: none
   position: absolute
   top: 0
   transform: scale(1.1)
   transition: all 0.3s ease
   width: 100vw
+
+  > main
+    max-height: 100%
+    padding: var(--view-padding)
+
+    &::-webkit-scrollbar
+      display: none
 
   &.center
     align-items: center

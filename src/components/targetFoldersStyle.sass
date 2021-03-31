@@ -2,16 +2,74 @@
 .target-folders
   background-color: var(--background)
   justify-content: center
-  padding-left: calc(3 * var(--view-padding))
   z-index: 3
+
+  > .icon
+    bottom: 0
+    font-size: 100vh
+    left: 0
+    opacity: .1
+    position: absolute
+    transform: translate(-10%, 30%)
+    z-index: 1
+
+  > main
+    max-height: 100%
+    overflow: auto
+    padding-left: calc(3 * var(--view-padding))
+    padding-right: calc(2 * var(--view-padding))
+    position: relative
+    z-index: 2
 
   h2
     margin: .5em 0
     opacity: .5
 
   .folders
-    padding: .5em 0
+    padding: 1em 0
+
+    .folder
+      align-items: center
+      animation: target-folder-in .3s ease forwards
+      backdrop-filter: blur(6px)
+      background-color: #fff8
+      border-radius: var(--radius)
+      box-shadow: var(--shadow)
+      display: flex
+      margin: .5em 0
+      padding: 1em
+
+      > .icon-wrapper
+        background-color: #0000000d
+        align-items: center
+        border-radius: 50%
+        display: flex
+        height: 2.5em
+        justify-content: center
+        margin-right: .5em
+        width: 2.5em
+
+        > .icon
+          color: var(--secondary)
+          opacity: .8
+
+      > .details
+        margin-right: auto
+
+        .name
+          font-size: 1.2em
+          font-weight: bold
+
+        .path
+          font-size: .7em
+          opacity: .6
 
   .actions
     .button
       margin-right: .5em
+      transition: all .3s ease
+
+      &.hide
+        pointer-events: none
+        opacity: 0
+        transform: translateX(-10%)
