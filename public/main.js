@@ -23,11 +23,9 @@ ipcMain.on("openDirectory", () => {
     .showOpenDialog(mainWindow, {
       properties: ["openDirectory"],
     })
-    .then(dir => {
-      mainWindow.webContents.send("directoryOpened", dir)
+    .then(directory => {
+      mainWindow.webContents.send("directoryOpened", directory)
     })
-
-  // ipcMain.emit("directoryOpened", dir)
 })
 
 app.on("ready", createWindow)
