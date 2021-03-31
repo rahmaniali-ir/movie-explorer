@@ -3,8 +3,9 @@ import LoadingView from "./components/loadingView"
 import TargetFoldersView from "./components/targetFoldersView"
 import DashboardView from "./components/dashboardView"
 import { useCallback, useEffect, useState } from "react"
+import { getExistingTargetPaths } from "./lib/targetFolders"
 
-const { ipcRenderer } = window.require("electron")
+const { insertTargetFolders } = require("./lib/targetFolders")
 
 let loadingStateIndex = 0
 const loadingStates = [
@@ -23,13 +24,26 @@ function App() {
 
   useEffect(() => {
     setLoadingDescription(loadingStates[0])
-    setShowTargetFolders(true)
-    // ipcRenderer.send("openDirectory")
+
+    getExistingTargetPaths().then(rows => {
+      if (rows.length === 0) {
+        setShowTargetFolders(true)
+      } else {
+        setLoadingDescription(loadingStates[1])
+      }
+    })
   }, [])
 
-  const continueTargetFolders = useCallback(() => {
-    setLoadingDescription(loadingStates[1])
+  const continueTargetFolders = useCallback(newTargetFolders => {
     setShowTargetFolders(false)
+
+    const newTargetPaths = newTargetFolders.map(folder => ({
+      path: folder.path,
+    }))
+
+    insertTargetFolders(newTargetPaths).then(() =>
+      setLoadingDescription(loadingStates[1])
+    )
   })
 
   return (

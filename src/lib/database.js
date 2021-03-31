@@ -3,7 +3,7 @@ import { SQLKeyValueString } from "./utilities"
 // const sqlite3 = require("sqlite3").verbose()
 const sqlite3 = window.require("sqlite3").verbose()
 
-let db
+let db = null
 
 const dbDo = func => {
   db = new sqlite3.Database("database.sqlite3")
@@ -13,15 +13,22 @@ const dbDo = func => {
 
 const initialize = () => {
   dbDo(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS "settings" (
+    db.run(`
+    CREATE TABLE IF NOT EXISTS "settings" (
       "name"	TEXT UNIQUE,
       "value"	TEXT,
       PRIMARY KEY("name")
-    );`)
+    );
+
+    CREATE TABLE IF NOT EXISTS "targetFolders" (
+      "path"	TEXT NOT NULL UNIQUE,
+      PRIMARY KEY("path")
+    );
+    `)
   })
 }
 
-const getTable = table => {
+export const getTable = table => {
   return new Promise((resolve, reject) => {
     dbDo(() => {
       db.all(`SELECT * FROM '${table}'`, (err, rows) => {
@@ -33,7 +40,7 @@ const getTable = table => {
   })
 }
 
-const getTableWhere = (table, where) => {
+export const getTableWhere = (table, where) => {
   return new Promise((resolve, reject) => {
     dbDo(() => {
       db.all(`SELECT * FROM '${table}' Where ${where}`, (err, rows) => {
@@ -45,7 +52,7 @@ const getTableWhere = (table, where) => {
   })
 }
 
-const insertIntoTable = (table, values) => {
+export const insertIntoTable = (table, values) => {
   return new Promise((resolve, reject) => {
     const SQLValues = values
       .map(value => `(${SQLKeyValueString(value)})`)
@@ -62,19 +69,18 @@ const insertIntoTable = (table, values) => {
   })
 }
 
+export const deleteFromTable = (table, where) => {
+  return new Promise((resolve, reject) => {
+    dbDo(() => {
+      console.log(`DELETE FROM '${table}' Where ${where}`)
+      db.run(`DELETE FROM '${table}' Where ${where}`, (err, rows) => {
+        if (err) reject(err)
+
+        resolve(rows)
+      })
+    })
+  })
+}
+
 initialize()
-export { getTable, getTableWhere, insertIntoTable }
 export default db
-
-// db.serialize(function () {
-//   // let stmt = db.prepare("INSERT INTO lorem VALUES (?)")
-//   // for (let i = 0; i < 10; i++) {
-//   //   stmt.run("Ipsum " + i)
-//   // }
-//   // stmt.finalize()
-
-//   db.each("SELECT * FROM settings", function (err, row) {
-//     console.log(row)
-//     // console.log(row.id + ": " + row.info)
-//   })
-// })

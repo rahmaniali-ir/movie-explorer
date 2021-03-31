@@ -3,7 +3,7 @@ import Button from "./button/button"
 import "./targetFoldersStyle.sass"
 import { useCallback, useEffect, useState } from "react"
 
-import { insertTargetFolders } from "../lib/targetFolders"
+import { getFolderName } from "../lib/targetFolders"
 
 const { ipcRenderer } = window.require("electron")
 
@@ -17,22 +17,36 @@ const Header = () => {
 }
 
 const TargetFoldersView = ({ onContinue = () => {}, show = false }) => {
-  const [showContinue, setShowContinue] = useState(false)
   const [targetFolders, setTargetFolders] = useState([])
 
   const addFolder = useCallback(() => {
     ipcRenderer.send("openDirectory")
-  })
+  }, [])
+
+  const deleteFolder = useCallback(
+    folder => {
+      setTargetFolders(oldFolders =>
+        oldFolders.filter(oldFolder => oldFolder !== folder)
+      )
+    },
+    [targetFolders, setTargetFolders]
+  )
 
   useEffect(() => {
-    ipcRenderer.on("directoryOpened", (evt, dialogData) => {
-      const paths = dialogData.filePaths
+    const directoryOpened = (evt, dialogData) => {
+      const newFolders = dialogData.filePaths.map(folder => ({
+        name: getFolderName(folder),
+        path: folder,
+      }))
 
-      insertTargetFolders(paths).then(newFolders => {
-        setTargetFolders(oldFolders => [...oldFolders, ...newFolders])
-        setShowContinue(true)
-      })
-    })
+      setTargetFolders(oldFolders => [...oldFolders, ...newFolders])
+    }
+
+    ipcRenderer.on("directoryOpened", directoryOpened)
+
+    return () => {
+      ipcRenderer.removeListener("directoryOpened", directoryOpened)
+    }
   }, [])
 
   return (
@@ -43,8 +57,8 @@ const TargetFoldersView = ({ onContinue = () => {}, show = false }) => {
         <Header />
 
         <div className='folders'>
-          {targetFolders.map(folder => (
-            <div className='folder' key={folder.name}>
+          {targetFolders.map((folder, folderIndex) => (
+            <div className='folder' key={`${folder.name}-${folderIndex}`}>
               <div className='icon-wrapper'>
                 <Icon name='folder' />
               </div>
@@ -54,7 +68,12 @@ const TargetFoldersView = ({ onContinue = () => {}, show = false }) => {
                 <div className='path'>{folder.path}</div>
               </div>
 
-              <Button icon='delete' text='Delete' color='#75787b' />
+              <Button
+                icon='delete'
+                text='Delete'
+                color='#75787b'
+                onClick={() => deleteFolder(folder)}
+              />
             </div>
           ))}
         </div>
@@ -68,11 +87,11 @@ const TargetFoldersView = ({ onContinue = () => {}, show = false }) => {
           />
 
           <Button
-            className={`${!showContinue ? "hide" : ""}`}
+            className={`${targetFolders.length === 0 ? "hide" : ""}`}
             icon='rightArrow'
             text='Continue'
             color='var(--primary)'
-            onClick={onContinue}
+            onClick={() => onContinue(targetFolders)}
             right
           />
         </div>
