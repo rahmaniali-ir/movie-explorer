@@ -1,0 +1,50 @@
+.button
+  align-items: center
+  background-color: transparent
+  border: none
+  border-radius: 100vh
+  cursor: pointer
+  display: inline-flex
+  line-height: 1em
+  outline: none
+  padding: .8em 1em
+  position: relative
+  transition: all .3s ease
+
+  &::before
+    background-color: currentColor
+    border-radius: inherit
+    bottom: 0
+    content: ''
+    display: block
+    left: 0
+    opacity: .1
+    position: absolute
+    right: 0
+    top: 0
+    transition: all .3s ease
+
+  &:hover::before
+    opacity: .15
+
+  &.right
+    flex-direction: row-reverse
+
+  > *
+    pointer-events: none
+    position: relative
+    z-index: 2
+
+  > .icon
+    font-size: 1.2em
+    margin-right: .8em
+
+  &.right > .icon
+    margin-left: .8em
+    margin-right: 0
+
+  &:hover > .icon
+    transform: scale(1.2)
+
+  &:active > .icon
+    transform: scale(.98)

@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import "./main.css"
+import "./style/main.sass"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { getTable } from "./lib/database"
